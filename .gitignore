@@ -1,8 +1,11 @@
 node_modules
 .env
+.classpath
+.project
 lib/**/*
 .git-temp/**/*
 **/src/**/*.jsx
 **/src/**/*.js
 build
 *.log
+/bin/

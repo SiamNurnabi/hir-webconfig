@@ -8,8 +8,15 @@
 
   <property name="build.version"               value="0.1.0"/>
 
-  <property name="src.dir"                     value="${basedir}/src"/>
-
-  <property name="build.dir"                  value="${basedir}/build"/>
-  <property name="build.lib.dir"              value="${build.dir}/lib"/>
+  <property name="build.dir" value="${basedir}/build"/>
+  <property name="build.doc.dir" value="${build.dir}/docs"/>
+  <property name="build.dist.dir" value="${build.dir}/dist"/>
+  <property name="build.script.dir" value="${build.dir}/script"/>
+  
+  <property name="src.dir" value="${basedir}/src"/>
+  <property name="webconfig.src.dir" value="${src.dir}/WEB-INF/src/java"/>
+  
+  <property name="build.classes" value="${build.dir}/WEB-INF/classes"/>
+  <property name="webconfig.lib.dir" value="${build.dir}/WEB-INF/lib"/>
+  <property name="build.lib.dir" value="${build.dir}/lib"/>	
 </project>

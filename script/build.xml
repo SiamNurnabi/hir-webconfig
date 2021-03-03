@@ -3,6 +3,16 @@
 <project name="jxntm-release" default="jar" basedir="./.." xmlns:artifact="antlib:org.apache.maven.artifact.ant">
 
   <import file="build-properties.xml"/>
+  <artifact:pom id="pom" file="script/pom.xml"/>
+  <artifact:dependencies pathId="dependencies" pomRefId="pom" scopes="compile,provided" filesetId="dependency.fileset" versionsId="dependency.fileset.no.versions"/>
+  
+  <path id="javac.classpath">
+    <!-- You can drop a jar file in lib folder during development-->
+    <fileset dir="${basedir}/lib">
+      <include name="**/*.jar"/>
+    </fileset> 
+    <path refid="dependencies"/>
+  </path>
 
   <target name="set.release.target">
     <property name="target-repo-url" value="${release-repo-url}"/>
@@ -17,30 +27,52 @@
   <target name="release" depends="set.release.target, release.artifact"/>
   <target name="snapshot" depends="set.snapshot.target, release.artifact"/>
 
-  <target name="release.artifact" depends="jar">
-    <artifact:deploy file="${build.lib.dir}/webconfig.war">
+  <target name="release.artifact" depends="webconfig.war">
+    <artifact:deploy file="${build.dist.dir}/webconfig.war">
       <remoteRepository id="${repo-id}" url="${target-repo-url}" />
       <pom file="script/pom.xml"/>
     </artifact:deploy>
   </target>
 
+  <!-- Prepare the build structure -->
   <target name="prepare">
+    <delete dir="${build.dir}"/>
+    <mkdir dir="${build.dir}"/>
+    <mkdir dir="${build.dist.dir}"/>
     <mkdir dir="${build.lib.dir}"/>
+    <mkdir dir="${build.classes}"/>
+    <mkdir dir="${basedir}/lib"/>
   </target>
-  <target name="jar" depends="prepare">
-    <zip destfile="${build.lib.dir}/webconfig.war">
-      <fileset dir="${src.dir}">
-        <include name="**/**" />
+	
+	
+  <target name="webconfig.war" description="Generate WAR" depends="prepare">	  
+    <javac  debug="on" srcdir="${webconfig.src.dir}" destdir="${build.classes}" classpathref="javac.classpath"/>
+    
+    <copy todir="${build.classes}" includeEmptyDirs="no">
+      <fileset dir="${webconfig.src.dir}">
+        <patternset>
+          <include name="**/**/*.conf"/>
+          <include name="**/**/*.properties"/>
+          <include name="**/**/*.xml"/>
+          <exclude name="**/**/*.java"/>
+        </patternset>
       </fileset>
+    </copy>
+    
+    <copy todir="${build.dir}" includeEmptyDirs="no">
+      <fileset dir="${src.dir}">
+        <patternset>
+          <include name="**/**"/>
+          <exclude name="**/src/**"/>
+          <exclude name="**/**/*template*"/>		  
+        </patternset>
+      </fileset>
+    </copy>  
+    
+    <war basedir="${build.dir}" warfile="${build.dist.dir}/webconfig.war" webxml="${src.dir}/WEB-INF/web.xml">
+      <include name="**/**"/>
+      <exclude name="dist"/>
+    </war>
+  </target>  
 
-    </zip>
-  </target>
-
-  <target name="install.modules">
-    <artifact:pom id="module.pom"  file="${basedir}/script/pom.xml"/>
-    <artifact:dependencies pomRefId="module.pom" scopes="provided, compile" filesetId="module.pom.files"/>
-    <unjar dest="${basedir}">
-      <fileset refid="module.pom.files"/>
-    </unjar>
-  </target>
 </project>
