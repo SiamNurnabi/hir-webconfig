@@ -1,0 +1,12 @@
+{
+ "PaymentLineID": {},
+ "PaymentID": {},
+ "PaymentAcceptedName": {},
+ "PaymentStatus": {},
+ "PersonName": {},
+ "FinancialDescription": {},
+ "CreateDate": {},
+ "CompletedDate": {},
+ "TotalPaymentAmount": {},
+ "RefundAmount": {}
+}

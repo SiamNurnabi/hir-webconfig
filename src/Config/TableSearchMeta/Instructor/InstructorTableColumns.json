@@ -1,0 +1,18 @@
+{
+  "FacultySerialNum": {
+    "hidden": true
+  },
+  "EmailAddress": {
+    "columnPosition": 0
+  },
+  "TelephoneNumber": {
+    "columnPosition": 1
+  },
+  "OrganizationName": {
+    "title": "Potisthan"
+  },
+  "Status": {},
+  "InstructorType": {
+    "defaultSortOrder": "ascend"
+  }
+}
